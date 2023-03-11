@@ -1,7 +1,7 @@
 import './bootstrap.min.css';
 import { Link } from 'react-router-dom';
 
-export default function NavBar() {
+export default function NavBar(props) {
     let path = window.location.pathname;
     return (
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
@@ -25,7 +25,7 @@ export default function NavBar() {
                         <input className="form-control me-sm-2" type="search" placeholder="Search" />
                         <button className="btn btn-secondary my-2 my-sm-0 me-sm-5" type="submit">Search</button>
                     </form>
-                    <button className="btn btn-secondary my-2 my-sm-0" type="submit">Log out</button>
+                    <button className="btn btn-secondary my-2 my-sm-0" type="submit" onClick={props.logOut}>Log out</button>
                 </div>
             </div>
         </nav>
