@@ -5,22 +5,6 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router} from "react-router-dom";
 
-import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
-
-const firebaseConfig = {
-    apiKey: "AIzaSyCv5boKiHH6jXk6Cp491m7oOLPqtkHB7Ww",
-    authDomain: "step-exam.firebaseapp.com",
-    projectId: "step-exam",
-    storageBucket: "step-exam.appspot.com",
-    messagingSenderId: "871581441255",
-    appId: "1:871581441255:web:f6ed273b1b4214ab6ad642"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app);
-
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>

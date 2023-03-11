@@ -1,5 +1,6 @@
 import "./bootstrap.min.css";
 import { useEffect } from "react";
+import {useParams} from "react-router-dom";
 
 const changeHandler = (e, note) => {
     let exitMode = document.getElementById("exitMode");
@@ -11,6 +12,7 @@ const changeHandler = (e, note) => {
     else {
         exitMode.value = "saved";
     }
+    console.log(exitMode.value)
 }
 
 const saveHandler = (e, note) => {
@@ -47,7 +49,8 @@ const unloadHandler = (e) => {
 }
 
 export default function EditNote(props) {
-    let {note} = props;
+    let params = useParams();
+    let note = props.notes.find(note => note.id === +params.id);
     useEffect(() => {
         window.addEventListener("beforeunload", unloadHandler);
         return () => {
@@ -55,12 +58,12 @@ export default function EditNote(props) {
         }
     })
     return (
-        <div className="container">
+        <div className="container mw-100">
             <form onSubmit={e => saveHandler(e, note)}>
                 <div className="mb-3">
                     <label htmlFor="title" className="form-label">Title</label>
                     <input type="text" className="form-control bg-dark text-light" id="title"
-                           defaultValue={note.title}/>
+                           defaultValue={note.title} onChange={e => changeHandler(e, note)}/>
                     <div className="invalid-feedback">You must specify a title!</div>
                 </div>
                 <div className="mb-3">
@@ -69,7 +72,7 @@ export default function EditNote(props) {
                               defaultValue={note.content} onChange={e => changeHandler(e, note)}/>
                 </div>
                 <div className="mb-3">
-                    <span className="text-muted ms-2">Last changed: {note.lastChanged.toLocaleString()}</span>
+                    <span className="text-muted">Last changed: {note.lastChanged.toLocaleString()}</span>
                 </div>
                 <div className="mb-3">
                     <input type="hidden" id="exitMode"/>
