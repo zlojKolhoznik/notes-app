@@ -15,10 +15,10 @@ export default function NavBar(props) {
                 <div className="collapse navbar-collapse" id="navbarColor02">
                     <ul className="navbar-nav me-auto">
                         <li className="nav-item">
-                            <Link className={`nav-link ${path==='/' ? 'active' : ''}`} to="/">Home</Link>
+                            <Link className={`nav-link ${path==='/' ? 'active' : ''}`} onClick={props.reload} to="/">Home</Link>
                         </li>
                         <li className="nav-item">
-                            <Link className={`nav-link ${path==='/favorites' ? 'active' : ''}`} to="/favorites">Favorite notes</Link>
+                            <Link className={`nav-link ${path==='/favorites' ? 'active' : ''}`} onClick={props.reload} to="/favorites">Favorite notes</Link>
                         </li>
                     </ul>
                     <form className="d-flex col-4">

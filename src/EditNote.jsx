@@ -1,6 +1,8 @@
 import "./bootstrap.min.css";
 import { useEffect } from "react";
-import {useParams} from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import { app } from "./Firebase";
+import { doc, updateDoc, getFirestore, serverTimestamp } from "firebase/firestore";
 
 const changeHandler = (e, note) => {
     let exitMode = document.getElementById("exitMode");
@@ -12,10 +14,9 @@ const changeHandler = (e, note) => {
     else {
         exitMode.value = "saved";
     }
-    console.log(exitMode.value)
 }
 
-const saveHandler = (e, note) => {
+const saveHandler = (e, note, navigate) => {
     e.preventDefault();
     let title = e.target.title;
     if (!title.value) {
@@ -27,14 +28,24 @@ const saveHandler = (e, note) => {
     exitMode.value = "saved";
     note.title = title.value;
     note.content = content.value;
+    note.lastChanged = {seconds: Math.floor(new Date().getTime() / 1000)};
+    console.log(note.lastChanged)
 
-    document.location.href = "/";
+    let db = getFirestore(app);
+    let noteRef = doc(db, "notes", `${note.id}`);
+    updateDoc(noteRef, {
+        title: note.title,
+        content: note.content,
+        lastChanged: serverTimestamp()
+    });
+
+    navigate("/")
 }
 
-const cancelHandler = () => {
+const cancelHandler = (e, navigate) => {
     let exitMode = document.getElementById("exitMode");
     exitMode.value = "saved";
-    document.location.href = "/";
+    navigate("/");
 }
 
 const unloadHandler = (e) => {
@@ -51,6 +62,8 @@ const unloadHandler = (e) => {
 export default function EditNote(props) {
     let params = useParams();
     let note = props.notes.find(note => note.id === +params.id);
+    let navigate = useNavigate();
+    console.log(note.lastChanged)
     useEffect(() => {
         window.addEventListener("beforeunload", unloadHandler);
         return () => {
@@ -59,7 +72,7 @@ export default function EditNote(props) {
     })
     return (
         <div className="container mw-100">
-            <form onSubmit={e => saveHandler(e, note)}>
+            <form onSubmit={e => saveHandler(e, note, navigate)}>
                 <div className="mb-3">
                     <label htmlFor="title" className="form-label">Title</label>
                     <input type="text" className="form-control bg-dark text-light" id="title"
@@ -72,12 +85,12 @@ export default function EditNote(props) {
                               defaultValue={note.content} onChange={e => changeHandler(e, note)}/>
                 </div>
                 <div className="mb-3">
-                    <span className="text-muted">Last changed: {note.lastChanged.toLocaleString()}</span>
+                    <span className="text-muted">Last changed: {new Date(note.lastChanged.seconds * 1000).toLocaleString()}</span>
                 </div>
                 <div className="mb-3">
                     <input type="hidden" id="exitMode"/>
                     <button type="submit" className="btn btn-primary me-2">Save</button>
-                    <button type="button" className="btn btn-secondary" onClick={cancelHandler}>Cancel</button>
+                    <button type="button" className="btn btn-secondary" onClick={e => cancelHandler(e, navigate)}>Cancel</button>
                 </div>
             </form>
         </div>
