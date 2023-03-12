@@ -1,21 +1,13 @@
-import "./bootstrap.min.css";
-import { signIn } from "./Firebase";
-import { setUserId } from "./App";
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import '../bootstrap.min.css';
+import { signIn } from '../Firebase';
+import { setUserId } from './App';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 const submitHandler = (e, setError, navigate) => {
     e.preventDefault();
     const email = e.target.email;
     const password = e.target.password;
-
-    // TODO: Remove when development is done
-    if (password.value === "1") {
-        setUserId("32aZNzcSVEh0Dvk8MPNJOQHstuw2");
-        navigate('/');
-        return;
-    }
-
     [email, password].forEach((input) => {
         if (!input.value) {
             input.classList.add('is-invalid');
@@ -23,7 +15,6 @@ const submitHandler = (e, setError, navigate) => {
         }
         input.classList.remove('is-invalid');
     });
-
     signIn(email.value, password.value)
         .then((uid) => {
             // Signed in
@@ -32,7 +23,6 @@ const submitHandler = (e, setError, navigate) => {
         })
         .catch((error) => {
             const errorCode = error.code;
-            const errorMessage = error.message;
             if (errorCode === 'auth/user-not-found') {
                 setError('unf');
             } else if (errorCode === 'auth/wrong-password') {
@@ -40,7 +30,6 @@ const submitHandler = (e, setError, navigate) => {
             } else {
                 setError('ue');
             }
-            console.log("Code: ", errorCode, "Message: ", errorMessage);
         });
 }
 

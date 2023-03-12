@@ -1,10 +1,10 @@
-import "./bootstrap.min.css";
-import { Link } from "react-router-dom";
-import { useReload } from "./App";
-import { removeNote, setFavorite } from "./Firebase";
+import '../bootstrap.min.css';
+import { Link } from 'react-router-dom';
+import { useReload } from './App';
+import { removeNote, setFavorite } from '../Firebase';
 
 const addToFavorites = (note) => {
-    if ("isFavorite" in note) {
+    if ('isFavorite' in note) {
         note.isFavorite = !note.isFavorite;
     } else {
         note.isFavorite = true;

@@ -1,5 +1,5 @@
-import { initializeApp } from "firebase/app";
-import {createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword} from "firebase/auth";
+import { initializeApp } from 'firebase/app';
+import {createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword} from 'firebase/auth';
 import {
     collection,
     doc,
@@ -11,25 +11,25 @@ import {
     setDoc,
     serverTimestamp,
     deleteDoc
-} from "firebase/firestore";
+} from 'firebase/firestore';
 
 export let app;
 
 export default function initializeFirebase() {
     const firebaseConfig = {
-        apiKey: "AIzaSyCv5boKiHH6jXk6Cp491m7oOLPqtkHB7Ww",
-        authDomain: "step-exam.firebaseapp.com",
-        projectId: "step-exam",
-        storageBucket: "step-exam.appspot.com",
-        messagingSenderId: "871581441255",
-        appId: "1:871581441255:web:f6ed273b1b4214ab6ad642"
+        apiKey: 'AIzaSyCv5boKiHH6jXk6Cp491m7oOLPqtkHB7Ww',
+        appId: '1:871581441255:web:f6ed273b1b4214ab6ad642',
+        authDomain: 'step-exam.firebaseapp.com',
+        messagingSenderId: '871581441255',
+        projectId: 'step-exam',
+        storageBucket: 'step-exam.appspot.com'
     };
     app = initializeApp(firebaseConfig);
 }
 
 export const getNotes = async (arr, userId) => {
     let db = getFirestore(app);
-    let q = query(collection(db, "notes"), where("userId", "==", userId));
+    let q = query(collection(db, 'notes'), where('userId', '==', userId));
     let snapshot = await getDocs(q);
     snapshot.forEach(doc => {
         if (arr.filter(note => note.id === doc.data().id).length <= 0) {
@@ -40,7 +40,7 @@ export const getNotes = async (arr, userId) => {
 
 export const updateNote = data => {
     let db = getFirestore(app);
-    let noteRef = doc(db, "notes", data.id);
+    let noteRef = doc(db, 'notes', data.id);
     updateDoc(noteRef, {
         title: data.title,
         content: data.content,
@@ -50,25 +50,25 @@ export const updateNote = data => {
 
 export const setFavorite = note => {
     let db = getFirestore(app);
-    let noteRef = doc(db, "notes", note.id);
+    let noteRef = doc(db, 'notes', note.id);
     updateDoc(noteRef, {isFavorite: note.isFavorite});
 }
 
 export const addNote = async note => {
     let db = getFirestore(app);
-    let noteRef = doc(db, "notes", note.id);
+    let noteRef = doc(db, 'notes', note.id);
     await setDoc(noteRef, {
-        id: note.id,
-        userId: note.userId,
-        title: note.title,
         content: note.content,
-        lastChanged: serverTimestamp()
+        id: note.id,
+        lastChanged: serverTimestamp(),
+        title: note.title,
+        userId: note.userId
     });
 }
 
 export const removeNote = note => {
     let db = getFirestore(app);
-    let noteRef = doc(db, "notes", note.id);
+    let noteRef = doc(db, 'notes', note.id);
     deleteDoc(noteRef);
 }
 

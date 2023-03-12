@@ -1,4 +1,4 @@
-import './bootstrap.min.css';
+import '../bootstrap.min.css';
 import { Link } from 'react-router-dom';
 
 export default function NavBar(props) {

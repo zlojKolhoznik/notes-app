@@ -1,9 +1,9 @@
-import "./bootstrap.min.css";
-import NotePreview from "./NotePreview";
-import FloatingButton from "./FloatingButton";
-import { addNote } from "./Firebase";
-import { useNavigate } from "react-router-dom";
-import { notes, userId } from "./App";
+import '../bootstrap.min.css';
+import NotePreview from './NotePreview';
+import FloatingButton from './FloatingButton';
+import { addNote } from '../Firebase';
+import { useNavigate } from 'react-router-dom';
+import { notes, userId } from './App';
 
 const createNote = navigate => {
     let time = Math.floor(new Date().getTime() / 1000);
