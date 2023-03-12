@@ -44,7 +44,7 @@ export default function RegisterForm() {
     return (
         <div className="container d-flex flex-column align-items-center justify-content-center"
              style={{height: "97vh"}}>
-            <div className="card col-4">
+            <div className="card">
                 <div className="card-body">
                     <h4 className="card-title">Register</h4>
                     <form onSubmit={(e) => submitHandler(e, setError, navigate)}>
