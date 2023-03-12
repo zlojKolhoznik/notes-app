@@ -2,31 +2,17 @@ import './App.css';
 import './bootstrap.min.css';
 import NavBar from "./NavBar";
 import EditNote from "./EditNote";
-import {Route, Routes, useNavigate} from "react-router-dom";
 import NotesContainer from "./NotesContainer";
 import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
-import {useState} from "react";
-import {app} from "./Firebase";
-import {getFirestore, doc, getDocs, query, collection, where} from "firebase/firestore";
+import { useState } from "react";
+import { getNotes } from "./Firebase";
+import { Route, Routes } from "react-router-dom";
 
 export const notes = [];
 export let setUserId;
 
-let userId;
-
-const getNotes = (reload) => {
-    let db = getFirestore(app);
-    let q = query(collection(db, "notes"), where("userId", "==", userId));
-    getDocs(q).then(snapshot => {
-        snapshot.forEach(doc => {
-            if (notes.filter(note => note.id === doc.data().id).length === 0) {
-                notes.push(doc.data());
-            }
-        });
-        reload();
-    });
-}
+export let userId;
 
 export const useReload = () => {
     let [val, setVal] = useState(0);
@@ -40,7 +26,7 @@ function App() {
         document.location.href = '/login';
     }
     if(userId && notes.length <= 0) {
-        getNotes(reload);
+        getNotes(notes, userId).then(() => reload());
     }
     return (
         <div className="App">

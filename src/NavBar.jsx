@@ -21,8 +21,8 @@ export default function NavBar(props) {
                             <Link className={`nav-link ${path==='/favorites' ? 'active' : ''}`} onClick={props.reload} to="/favorites">Favorite notes</Link>
                         </li>
                     </ul>
-                    <form className="d-flex col-4">
-                        <input className="form-control me-sm-2" type="search" placeholder="Search" />
+                    <form className="d-flex">
+                        <input className="form-control me-sm-2" type="search" placeholder="Note title" />
                         <button className="btn btn-secondary my-2 my-sm-0 me-sm-5" type="submit">Search</button>
                     </form>
                     <button className="btn btn-secondary my-2 my-sm-0" type="submit" onClick={props.logOut}>Log out</button>

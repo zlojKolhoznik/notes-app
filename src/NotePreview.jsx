@@ -1,34 +1,40 @@
 import "./bootstrap.min.css";
 import { Link } from "react-router-dom";
 import { useReload } from "./App";
-import { app } from "./Firebase";
-import { getFirestore, doc, updateDoc } from "firebase/firestore";
+import { removeNote, setFavorite } from "./Firebase";
 
-const addToFavorites = (note, reload) => {
+const addToFavorites = (note) => {
     if ("isFavorite" in note) {
         note.isFavorite = !note.isFavorite;
     } else {
         note.isFavorite = true;
     }
-
-    let db = getFirestore(app);
-    let noteRef = doc(db, "notes", `${note.id}`);
-    updateDoc(noteRef, {
-        isFavorite: note.isFavorite
-    })
-
-    reload();
+    setFavorite(note);
 }
 
 export default function NotePreview(props) {
-    let note = props.notes.find(note => note.id === +props.id);
-    let reload = useReload()
+    let note = props.notes.find(note => note.id == props.id);
+    let reload = useReload();
+    if (!note) {
+        console.log(`ERROR 404! Note with id ${props.id} is not found in database. It was either deleted or some unknown error occurred`);
+        return null;
+    }
     return (
         <div className="card border-primary m-4 p-0" style={{maxWidth: "20rem", height: "15rem", overflow: "hidden"}}>
             <div className="card-header text-muted d-flex justify-content-between align-items-center">
                 {new Date(note.lastChanged.seconds * 1000).toLocaleString()}
-                <button className="btn btn-link" onClick={() => addToFavorites(note, reload)}>
+                <button className="btn btn-danger" onClick={() => {
+                    addToFavorites(note);
+                    reload();
+                }}>
                     <i className={`bi bi-heart${note.isFavorite ? '-fill' : ''}`}></i>
+                </button>
+                <button className="btn btn-danger" onClick={() => {
+                    removeNote(note);
+                    props.notes.splice(props.notes.indexOf(note), 1);
+                    reload();
+                }}>
+                    <i className="bi bi-trash3"></i>
                 </button>
             </div>
             <Link to={`/notes/${note.id}`} className="text-decoration-none text-light">

@@ -1,8 +1,7 @@
 import "./bootstrap.min.css";
 import { useEffect } from "react";
+import { updateNote } from "./Firebase";
 import { useParams, useNavigate } from "react-router-dom";
-import { app } from "./Firebase";
-import { doc, updateDoc, getFirestore, serverTimestamp } from "firebase/firestore";
 
 const changeHandler = (e, note) => {
     let exitMode = document.getElementById("exitMode");
@@ -29,31 +28,22 @@ const saveHandler = (e, note, navigate) => {
     note.title = title.value;
     note.content = content.value;
     note.lastChanged = {seconds: Math.floor(new Date().getTime() / 1000)};
-    console.log(note.lastChanged)
-
-    let db = getFirestore(app);
-    let noteRef = doc(db, "notes", `${note.id}`);
-    updateDoc(noteRef, {
-        title: note.title,
-        content: note.content,
-        lastChanged: serverTimestamp()
-    });
-
-    navigate("/")
+    updateNote(note);
+    navigate("/");
 }
 
-const cancelHandler = (e, navigate) => {
+const cancelHandler = navigate => {
     let exitMode = document.getElementById("exitMode");
     exitMode.value = "saved";
     navigate("/");
 }
 
-const unloadHandler = (e) => {
-    e = e || window.event;
+const unloadHandler = event => {
+    event = event || window.event;
     let exitMode = document.getElementById("exitMode");
     if (exitMode.value === "unsaved") {
-        if (e) {
-            e.returnValue = "You have unsaved changes!";
+        if (event) {
+            event.returnValue = "You have unsaved changes!";
         }
         return "You have unsaved changes!";
     }
@@ -61,9 +51,9 @@ const unloadHandler = (e) => {
 
 export default function EditNote(props) {
     let params = useParams();
-    let note = props.notes.find(note => note.id === +params.id);
+    let note = props.notes.find(note => note.id == params.id);
     let navigate = useNavigate();
-    console.log(note.lastChanged)
+    console.log(props.notes)
     useEffect(() => {
         window.addEventListener("beforeunload", unloadHandler);
         return () => {
@@ -90,7 +80,7 @@ export default function EditNote(props) {
                 <div className="mb-3">
                     <input type="hidden" id="exitMode"/>
                     <button type="submit" className="btn btn-primary me-2">Save</button>
-                    <button type="button" className="btn btn-secondary" onClick={e => cancelHandler(e, navigate)}>Cancel</button>
+                    <button type="button" className="btn btn-secondary" onClick={() => cancelHandler(navigate)}>Cancel</button>
                 </div>
             </form>
         </div>
