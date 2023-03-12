@@ -1,17 +1,17 @@
-import "./bootstrap.min.css";
-import { useEffect } from "react";
-import { updateNote } from "./Firebase";
-import { useParams, useNavigate } from "react-router-dom";
+import './bootstrap.min.css';
+import { useEffect } from 'react';
+import { updateNote } from './Firebase';
+import { useParams, useNavigate } from 'react-router-dom';
 
 const changeHandler = (e, note) => {
-    let exitMode = document.getElementById("exitMode");
-    let title = document.getElementById("title");
-    let content = document.getElementById("content");
+    let exitMode = document.getElementById('exitMode');
+    let title = document.getElementById('title');
+    let content = document.getElementById('content');
     if (title.value !== note.title || content.value !== note.content) {
-        exitMode.value = "unsaved";
+        exitMode.value = 'unsaved';
     }
     else {
-        exitMode.value = "saved";
+        exitMode.value = 'saved';
     }
 }
 
@@ -19,33 +19,33 @@ const saveHandler = (e, note, navigate) => {
     e.preventDefault();
     let title = e.target.title;
     if (!title.value) {
-        title.classList.add("is-invalid");
+        title.classList.add('is-invalid');
         return;
     }
     let content = e.target.content;
     let exitMode = e.target.exitMode;
-    exitMode.value = "saved";
+    exitMode.value = 'saved';
     note.title = title.value;
     note.content = content.value;
     note.lastChanged = {seconds: Math.floor(new Date().getTime() / 1000)};
     updateNote(note);
-    navigate("/");
+    navigate('/');
 }
 
 const cancelHandler = navigate => {
-    let exitMode = document.getElementById("exitMode");
-    exitMode.value = "saved";
-    navigate("/");
+    let exitMode = document.getElementById('exitMode');
+    exitMode.value = 'saved';
+    navigate('/');
 }
 
 const unloadHandler = event => {
     event = event || window.event;
-    let exitMode = document.getElementById("exitMode");
-    if (exitMode.value === "unsaved") {
+    let exitMode = document.getElementById('exitMode');
+    if (exitMode.value === 'unsaved') {
         if (event) {
-            event.returnValue = "You have unsaved changes!";
+            event.returnValue = 'You have unsaved changes!';
         }
-        return "You have unsaved changes!";
+        return 'You have unsaved changes!';
     }
 }
 
@@ -55,9 +55,9 @@ export default function EditNote(props) {
     let navigate = useNavigate();
     console.log(props.notes)
     useEffect(() => {
-        window.addEventListener("beforeunload", unloadHandler);
+        window.addEventListener('beforeunload', unloadHandler);
         return () => {
-            window.removeEventListener("beforeunload", unloadHandler);
+            window.removeEventListener('beforeunload', unloadHandler);
         }
     })
     return (

@@ -1,8 +1,8 @@
-import "./bootstrap.min.css";
-import { setUserId } from "./App";
-import { signUp } from "./Firebase";
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import './bootstrap.min.css';
+import { setUserId } from './App';
+import { signUp } from './Firebase';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 const submitHandler = (e, setError, navigate) => {
     e.preventDefault();
@@ -28,7 +28,6 @@ const submitHandler = (e, setError, navigate) => {
         })
         .catch((error) => {
             const errorCode = error.code;
-            const errorMessage = error.message;
             if (errorCode === 'auth/email-already-in-use') {
                 setError('eaiu');
             } else if (errorCode === 'auth/weak-password') {
@@ -36,7 +35,6 @@ const submitHandler = (e, setError, navigate) => {
             } else {
                 setError('ue');
             }
-            console.log("Code: ", errorCode, "Message: ", errorMessage);
         });
 }
 
