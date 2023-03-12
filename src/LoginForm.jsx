@@ -1,9 +1,8 @@
 import "./bootstrap.min.css";
-import { Link, useNavigate } from "react-router-dom";
-import { app } from "./Firebase";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { signIn } from "./Firebase";
 import { setUserId } from "./App";
-import {useState} from "react";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const submitHandler = (e, setError, navigate) => {
     e.preventDefault();
@@ -25,13 +24,10 @@ const submitHandler = (e, setError, navigate) => {
         input.classList.remove('is-invalid');
     });
 
-    const auth = getAuth(app);
-    signInWithEmailAndPassword(auth, email.value, password.value)
-        .then((userCredential) => {
+    signIn(email.value, password.value)
+        .then((uid) => {
             // Signed in
-            const user = userCredential.user;
-            console.log("User: ", user);
-            setUserId(user.uid);
+            setUserId(uid);
             navigate('/');
         })
         .catch((error) => {

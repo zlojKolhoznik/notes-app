@@ -1,4 +1,5 @@
 import { initializeApp } from "firebase/app";
+import {createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword} from "firebase/auth";
 import {
     collection,
     doc,
@@ -69,4 +70,24 @@ export const removeNote = note => {
     let db = getFirestore(app);
     let noteRef = doc(db, "notes", note.id);
     deleteDoc(noteRef);
+}
+
+export const signIn = async (email, password) => {
+    let auth = getAuth(app);
+    try {
+        let result = await signInWithEmailAndPassword(auth, email, password);
+        return result.user.uid;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export const signUp = async (email, password) => {
+    let auth = getAuth(app);
+    try {
+        let result = await createUserWithEmailAndPassword(auth, email, password);
+        return result.user.uid;
+    } catch (error) {
+        throw error;
+    }
 }
