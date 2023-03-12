@@ -23,19 +23,21 @@ export default function NotePreview(props) {
         <div className="card border-primary m-4 p-0" style={{maxWidth: "20rem", height: "15rem", overflow: "hidden"}}>
             <div className="card-header text-muted d-flex justify-content-between align-items-center">
                 {new Date(note.lastChanged.seconds * 1000).toLocaleString()}
-                <button className="btn btn-danger" onClick={() => {
-                    addToFavorites(note);
-                    reload();
-                }}>
-                    <i className={`bi bi-heart${note.isFavorite ? '-fill' : ''}`}></i>
-                </button>
-                <button className="btn btn-danger" onClick={() => {
-                    removeNote(note);
-                    props.notes.splice(props.notes.indexOf(note), 1);
-                    reload();
-                }}>
-                    <i className="bi bi-trash3"></i>
-                </button>
+                <div>
+                    <button className="btn btn-outline-danger border-0" onClick={() => {
+                        addToFavorites(note);
+                        reload();
+                    }}>
+                        <i className={`bi bi-heart${note.isFavorite ? '-fill' : ''}`}></i>
+                    </button>
+                    <button className="btn btn-outline-warning border-0" onClick={() => {
+                        removeNote(note);
+                        props.notes.splice(props.notes.indexOf(note), 1);
+                        reload();
+                    }}>
+                        <i className="bi bi-trash3"></i>
+                    </button>
+                </div>
             </div>
             <Link to={`/notes/${note.id}`} className="text-decoration-none text-light">
                 <div className="card-body">
