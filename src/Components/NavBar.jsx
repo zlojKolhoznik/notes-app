@@ -1,11 +1,10 @@
 import '../bootstrap.min.css';
-import '../navbar.css';
 import { Link } from 'react-router-dom';
 
 export default function NavBar(props) {
     let path = window.location.pathname;
     return (
-        <nav className="navbar navbar-expand-lg navbar-dark bg-dark mb-4 position-sticky top-0">
+        <nav className="navbar navbar-expand-lg navbar-dark bg-dark mb-4 position-sticky top-0" style={{zIndex: "1"}}>
             <div className="container-fluid">
                 <Link className="navbar-brand" to="/">My Notes</Link>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
