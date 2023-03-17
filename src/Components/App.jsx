@@ -7,6 +7,7 @@ import RegisterForm from './RegisterForm';
 import { useState } from 'react';
 import { getNotes } from '../Firebase';
 import { Route, Routes } from 'react-router-dom';
+import {ToastContainer} from "react-toastify";
 
 export const notes = [];
 export let setUserId;
@@ -28,6 +29,7 @@ export default function App() {
     }
     return (
         <div className="App">
+            <ToastContainer/>
             {userId && <NavBar logOut={() => setUserId(null)} reload={reload}/>}
             <Routes>
                 <Route index element={<NotesContainer notes={notes}/>}/>

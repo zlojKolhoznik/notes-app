@@ -4,6 +4,7 @@ import FloatingButton from './FloatingButton';
 import { addNote } from '../Firebase';
 import { useNavigate } from 'react-router-dom';
 import { notes, userId } from './App';
+import {Slide, toast} from "react-toastify";
 
 const createNote = navigate => {
     let time = Math.floor(new Date().getTime() / 1000);
@@ -15,7 +16,20 @@ const createNote = navigate => {
         lastChanged: {seconds: time}
     }
     notes.push(note);
-    addNote(note).then(() => navigate(`/notes/${note.id}`));
+    addNote(note).then(() => {
+        toast.success('Note created successfully!', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            closeButton: true,
+            draggable: false,
+            transition: Slide,
+            theme: 'dark'
+        });
+        navigate(`/notes/${note.id}`);
+    });
 }
 
 export default function NotesContainer(props) {

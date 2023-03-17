@@ -2,6 +2,7 @@ import '../bootstrap.min.css';
 import {createRef, useEffect} from 'react';
 import { updateNote } from '../Firebase';
 import { useParams, useNavigate } from 'react-router-dom';
+import {Slide, toast} from "react-toastify";
 
 let exitModeRef = createRef();
 let titleRef = createRef();
@@ -33,6 +34,17 @@ const saveHandler = (e, note, navigate) => {
     note.content = content.value;
     note.lastChanged = {seconds: Math.floor(new Date().getTime() / 1000)};
     updateNote(note);
+    toast.success('Note saved!', {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        closeButton: true,
+        transition: Slide,
+        theme: 'dark'
+    });
     navigate('/');
 }
 

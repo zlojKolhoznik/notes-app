@@ -2,6 +2,7 @@ import '../bootstrap.min.css';
 import { Link } from 'react-router-dom';
 import { useReload } from './App';
 import { removeNote, setFavorite } from '../Firebase';
+import {Slide, toast} from "react-toastify";
 
 const addToFavorites = (note) => {
     if ('isFavorite' in note) {
@@ -10,6 +11,22 @@ const addToFavorites = (note) => {
         note.isFavorite = true;
     }
     setFavorite(note);
+}
+
+const deleteNote = (note, reload) => {
+    removeNote(note);
+    toast.success('Note deleted successfully!', {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        closeButton: true,
+        draggable: false,
+        transition: Slide,
+        theme: 'dark'
+    });
+    reload();
 }
 
 export default function NotePreview(props) {
@@ -31,9 +48,8 @@ export default function NotePreview(props) {
                         <i className={`bi bi-heart${note.isFavorite ? '-fill' : ''}`}></i>
                     </button>
                     <button className="btn btn-outline-warning border-0" onClick={() => {
-                        removeNote(note);
+                        deleteNote(note, reload);
                         props.notes.splice(props.notes.indexOf(note), 1);
-                        reload();
                     }}>
                         <i className="bi bi-trash3"></i>
                     </button>
