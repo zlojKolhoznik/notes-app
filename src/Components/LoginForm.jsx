@@ -29,7 +29,6 @@ const submitHandler = (e, navigate) => {
         .then((uid) => {
             // Signed in
             setUserId(uid);
-            toast('Test');
             navigate('/');
         })
         .catch((error) => {
