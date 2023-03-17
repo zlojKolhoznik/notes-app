@@ -1,12 +1,16 @@
 import '../bootstrap.min.css';
-import { useEffect } from 'react';
+import {createRef, useEffect} from 'react';
 import { updateNote } from '../Firebase';
 import { useParams, useNavigate } from 'react-router-dom';
 
+let exitModeRef = createRef();
+let titleRef = createRef();
+let contentRef = createRef();
+
 const changeHandler = (e, note) => {
-    let exitMode = document.getElementById('exitMode');
-    let title = document.getElementById('title');
-    let content = document.getElementById('content');
+    const exitMode = exitModeRef.current;
+    const title = titleRef.current;
+    const content = contentRef.current;
     if (title.value !== note.title || content.value !== note.content) {
         exitMode.value = 'unsaved';
     }
@@ -16,14 +20,14 @@ const changeHandler = (e, note) => {
 }
 
 const saveHandler = (e, note, navigate) => {
+    const title = titleRef.current;
+    const content = contentRef.current;
+    const exitMode = exitModeRef.current;
     e.preventDefault();
-    let title = e.target.title;
     if (!title.value) {
         title.classList.add('is-invalid');
         return;
     }
-    let content = e.target.content;
-    let exitMode = e.target.exitMode;
     exitMode.value = 'saved';
     note.title = title.value;
     note.content = content.value;
@@ -33,14 +37,14 @@ const saveHandler = (e, note, navigate) => {
 }
 
 const cancelHandler = navigate => {
-    let exitMode = document.getElementById('exitMode');
+    const exitMode = exitModeRef.current;
     exitMode.value = 'saved';
     navigate('/');
 }
 
 const unloadHandler = event => {
     event = event || window.event;
-    let exitMode = document.getElementById('exitMode');
+    const exitMode = exitModeRef.current;
     if (exitMode.value === 'unsaved') {
         if (event) {
             event.returnValue = 'You have unsaved changes!';
@@ -66,19 +70,19 @@ export default function EditNote(props) {
                 <div className="mb-3">
                     <label htmlFor="title" className="form-label">Title</label>
                     <input type="text" className="form-control bg-dark text-light" id="title"
-                           defaultValue={note.title} onChange={e => changeHandler(e, note)}/>
+                           defaultValue={note.title} onChange={e => changeHandler(e, note)} ref={titleRef}/>
                     <div className="invalid-feedback">You must specify a title!</div>
                 </div>
                 <div className="mb-3">
                     <label htmlFor="content" className="form-label">Content</label>
                     <textarea className="form-control bg-dark text-light" id="content" rows="5"
-                              defaultValue={note.content} onChange={e => changeHandler(e, note)}/>
+                              defaultValue={note.content} onChange={e => changeHandler(e, note)} ref={contentRef}/>
                 </div>
                 <div className="mb-3">
                     <span className="text-muted">Last changed: {new Date(note.lastChanged.seconds * 1000).toLocaleString()}</span>
                 </div>
                 <div className="mb-3">
-                    <input type="hidden" id="exitMode"/>
+                    <input type="hidden" id="exitMode" ref={exitModeRef}/>
                     <button type="submit" className="btn btn-primary me-2">Save</button>
                     <button type="button" className="btn btn-secondary" onClick={() => cancelHandler(navigate)}>Cancel</button>
                 </div>

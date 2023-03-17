@@ -1,14 +1,18 @@
 import '../bootstrap.min.css';
 import { setUserId } from './App';
 import { signUp } from '../Firebase';
-import { useState } from 'react';
+import {createRef, useState} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+
+let emailRef = createRef();
+let passwordRef = createRef();
+let confirmPasswordRef = createRef();
 
 const submitHandler = (e, setError, navigate) => {
     e.preventDefault();
-    const email = e.target.email;
-    const password = e.target.password;
-    const confirmPassword = e.target.confirmPassword;
+    const email = emailRef.current;
+    const password = passwordRef.current;
+    const confirmPassword = confirmPasswordRef.current;
     [email, password, confirmPassword].forEach((input) => {
         if (!input.value) {
             input.classList.add('is-invalid');
@@ -38,6 +42,7 @@ const submitHandler = (e, setError, navigate) => {
         });
 }
 
+
 export default function RegisterForm() {
     let [error, setError] = useState(null);
     const navigate = useNavigate();
@@ -50,18 +55,18 @@ export default function RegisterForm() {
                     <form onSubmit={(e) => submitHandler(e, setError, navigate)}>
                         <div className="form-group mb-3">
                             <label htmlFor="email" className="form-label">Email address</label>
-                            <input type="email" className="form-control" id="email" name="email"/>
+                            <input type="email" className="form-control" id="email" name="email" ref={emailRef}/>
                             <div id="emailHelp" className="form-text">We'll never share your email with anyone else.
                             </div>
                         </div>
                         <div className="form-group mb-3">
                             <label htmlFor="password" className="form-label">Password</label>
-                            <input type="password" className="form-control" id="password" name="password"/>
+                            <input type="password" className="form-control" id="password" name="password" ref={passwordRef}/>
                         </div>
                         <div className="form-group mb-3 has-validation">
                             <label htmlFor="confirmPassword" className="form-label">Confirm Password</label>
                             <input type="password" className="form-control" id="confirmPassword"
-                                   name="confirmPassword"/>
+                                   name="confirmPassword" ref={confirmPasswordRef}/>
                             <p className="invalid-feedback">Passwords don't match!</p>
                         </div>
                         <div className="form-group mb-3">

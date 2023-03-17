@@ -1,13 +1,16 @@
 import '../bootstrap.min.css';
-import { signIn } from '../Firebase';
-import { setUserId } from './App';
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import {signIn} from '../Firebase';
+import {setUserId} from './App';
+import {createRef, useState} from 'react';
+import {Link, useNavigate} from 'react-router-dom';
+
+let emailRef = createRef();
+let passwordRef = createRef();
 
 const submitHandler = (e, setError, navigate) => {
     e.preventDefault();
-    const email = e.target.email;
-    const password = e.target.password;
+    const email = emailRef.current;
+    const password = passwordRef.current;
     [email, password].forEach((input) => {
         if (!input.value) {
             input.classList.add('is-invalid');
@@ -46,12 +49,12 @@ export default function LoginForm() {
                         <div className="form-group mb-3 has-validation">
                             <label htmlFor="email">Email address</label>
                             <input type="email" className="form-control" id="email" aria-describedby="emailHelp"
-                                   placeholder="Enter email"/>
+                                   placeholder="Email" ref={emailRef}/>
                             <div className="invalid-feedback">Enter proper email address!</div>
                         </div>
                         <div className="form-group mb-3 has-validation">
                             <label htmlFor="password">Password</label>
-                            <input type="password" className="form-control" id="password" placeholder="Password"/>
+                            <input type="password" className="form-control" id="password" placeholder="Password" ref={passwordRef}/>
                             <div className="invalid-feedback">This field must not be empty!</div>
                         </div>
                         <div className="form-group mb-3">
